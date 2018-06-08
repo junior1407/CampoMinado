@@ -44,14 +44,27 @@ public class Board {
         }
 
     }
+    
     public char GetAdjacentBombs(int i, int j)
     {
-        int sum = (GetCellContent(i - 1, j - 1) + GetCellContent(i, j - 1) + GetCellContent(i + 1, j - 1)
-            + GetCellContent(i - 1, j) + GetCellContent(i + 1, j)
-            + GetCellContent(i - 1, j + 1) + GetCellContent(i , j + 1) + +GetCellContent(i +1, j+1));
+        int sum = (isCellBomb(i - 1, j - 1) + isCellBomb(i, j - 1) + isCellBomb(i + 1, j - 1)
+            + isCellBomb(i - 1, j) + isCellBomb(i + 1, j)
+            + isCellBomb(i - 1, j + 1) + isCellBomb(i , j + 1) + +isCellBomb(i +1, j+1));
         return sum.ToString().ToCharArray()[0]; 
     }
-    public int GetCellContent(int i, int j)
+
+    public int isCellBomb(Player p)
+    {
+        Vector3 pos = p.getPosition();
+        return isCellBomb((int)pos.x, (int) pos.z);
+    }
+
+    public int getCellContect(Player p)
+    {
+        Vector3 pos = p.getPosition();
+        return getCellContect((int)pos.x, (int)pos.z);
+    }
+    public int isCellBomb(int i, int j)
     {
         if (i < 0 || i >= SIZE || j<0 || j>=SIZE)
         {
@@ -59,6 +72,10 @@ public class Board {
         }
         if (matrix[i,j] == '*') { return 1; }
         return 0;
+    }
+    public int getCellContect(int i, int j)
+    {
+        return (int) char.GetNumericValue(matrix[i, j]);
     }
    
     public void printMatrix()
