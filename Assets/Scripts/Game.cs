@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class Game : MonoBehaviour
 
     public float time = 0f;
     public GameObject[,] tiles;
+    bool[,] revealed;
     public GameObject[,] topTiles;
     void Start()
     {
@@ -25,6 +27,8 @@ public class Game : MonoBehaviour
         player = new Player(size);
         playerObj = GameObject.Instantiate(helper.playerPrefab, new Vector3(0, 1.5f, 0), Quaternion.identity);
         tiles = new GameObject[size, size];
+        topTiles = new GameObject[size, size];
+        revealed = new bool[size, size];
         CreateBoard();
     }
 
@@ -80,25 +84,96 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            player.PlaceFlag();
+            if (player.PlaceFlag())
+            {
+                Vector3 pos = player.getPosition();
+                int i = (int)pos.x;
+                int j = (int)pos.z;
+                topTiles[i,j] =  GameObject.Instantiate(helper.flagPrefab, new Vector3(i, 1.5f, j), Quaternion.identity);
+                helper.setTextFlagsRemaining(player.getFlagsRemaining());
+                if (player.getFlagsRemaining() ==0) { CheckWinorLose(); }
+            }
+
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // int i = player.
+           
             if (board.isCellBomb(player) == 1)
             {
                 GameOver();
             }
             else
             {
-                Debug.Log(board.getCellContect(player)+"");
+                RevealCell(player);
             }
         }
 
     }
 
+ 
+
+    void RevealCell(Player player)
+    {
+        Vector3 pos = player.getPosition();
+        int i = (int)pos.x;
+        int j = (int)pos.z;
+        RevealCell(i, j);
+    }
+
+    void RevealCell(int x, int y)
+    {
+
+        if (x >= 0 && x < size && y >= 0 && y < size)
+        {
+            if (revealed[x, y] == false)
+            {
+                revealed[x, y] = true;
+
+                if (board.isCellBomb(x, y) == 0)
+                {
+                    int content = board.getCellContect(x, y);
+                    if (content == 0)
+                    {
+                         tiles[x, y].transform.Translate(Vector3.down*0.5f);
+                         RevealCell(x - 1, y - 1);
+                        RevealCell(x - 1, y);
+                        RevealCell(x - 1, y + 1);
+                        RevealCell(x, y - 1);
+                        RevealCell(x, y + 1);
+                        RevealCell(x + 1, y - 1);
+                        RevealCell(x + 1, y);
+                        RevealCell(x + 1, y + 1);
+                    }
+                    else
+                    {
+                        tiles[x, y].GetComponentInChildren<TextMesh>().text = content + "";
+                    }
+                }
+            }
+        }
+    }
+    private void CheckWinorLose()
+    {
+        if (board.checkFlags(player.getMatrix()))
+        {
+            Win();
+        }
+        else
+        {
+            GameOver();
+        }
+    }
+
+
+    private void Win()
+    {
+        Debug.Log("Win");
+        throw new NotImplementedException();
+    }
+
     private void GameOver()
     {
+        Debug.Log("Loss");
         throw new NotImplementedException();
     }
 }

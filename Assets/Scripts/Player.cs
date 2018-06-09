@@ -10,9 +10,17 @@ public class Player {
         UP,DOWN, LEFT,RIGHT   
     }
     int flagsRemaining;
-    public int[,] matrix;
+     int[,] matrix;
     int size;
-
+        
+    public int[,] getMatrix()
+    {
+        return matrix;
+    }
+    public int getFlagsRemaining()
+    {
+        return flagsRemaining;
+    }
     public Player(int size)
     {
         matrix = new int[size, size];
@@ -46,17 +54,18 @@ public class Player {
         return false;
     }
 
-    public void PlaceFlag()
+    public bool PlaceFlag()
     {
         if (flagsRemaining>0)
         {
             if (matrix[x,y] ==0)
             {
-                Debug.Log("Sucesso");
                 flagsRemaining--;
                 matrix[x, y] = 1;
+                return true;
             }
         }
+        return false;
     }
 
 }

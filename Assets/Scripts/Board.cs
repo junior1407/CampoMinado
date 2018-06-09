@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,13 +17,14 @@ public class Board {
         fillMatrix();
     }
 
+  
     void addBombsMatrix()
     {
         int x, y;
         for (int i = 0; i< SIZE; i++)
         {
-            x = Random.Range(0, SIZE); // SIZE não incluso.
-            y = Random.Range(0, SIZE);
+            x = UnityEngine.Random.Range(0, SIZE); // SIZE não incluso.
+            y = UnityEngine.Random.Range(0, SIZE);
             if (matrix[x,y] == '*')
             {
                 i--;
@@ -89,5 +91,22 @@ public class Board {
             }
             Debug.Log(line + "");
         }
+    }
+
+    public bool checkFlags(int[,] flags)
+    {
+        int counter = 0;
+        for(int i=0; i<SIZE; i++)
+        {
+            for (int j =0; j< SIZE; j++)
+            {
+                if (matrix[i,j] == '*' && flags[i,j] == 1)
+                {
+                    counter++;
+                }
+            }
+        }
+        if (counter == SIZE) { return true; }
+        return false;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,15 +8,14 @@ public class Helper : MonoBehaviour {
 
     public GameObject tilePrefab;
     public  GameObject playerPrefab;
+    public GameObject flagPrefab;
     public  GameObject group;
     public Text timer;
     public Text flagsRemaining;
+    public Material blue;
 
 
-    public void setTextFlagsRemaining()
-    {
-
-    }
+ 
     public void setTimer(int seconds)
     {
         int minutes = seconds / 60;
@@ -42,4 +42,9 @@ public class Helper : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    internal void setTextFlagsRemaining(int v)
+    {
+        flagsRemaining.text = v + "";
+    }
 }
