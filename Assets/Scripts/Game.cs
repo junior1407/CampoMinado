@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
-
+    /*
     public GameObject tilePrefab;
     public GameObject playerPrefab;
-    public GameObject group;
+    public GameObject group;*/
     public GameObject playerObj;
+    public Helper helper;
     int size = 10;
     Board board;
     Player player;
@@ -22,7 +23,7 @@ public class Game : MonoBehaviour
         board = new Board(size); //Instancia e prepara a matriz.
         board.printMatrix();
         player = new Player(size);
-        playerObj = GameObject.Instantiate(playerPrefab, new Vector3(0, 1.5f, 0), Quaternion.identity);
+        playerObj = GameObject.Instantiate(helper.playerPrefab, new Vector3(0, 1.5f, 0), Quaternion.identity);
         tiles = new GameObject[size, size];
         CreateBoard();
     }
@@ -35,7 +36,7 @@ public class Game : MonoBehaviour
             for (int j = 0; j < size; j++)
             {
 
-                tiles[i, j] = GameObject.Instantiate(tilePrefab, new Vector3(i, 0, j), Quaternion.identity, group.transform);
+                tiles[i, j] = GameObject.Instantiate(helper.tilePrefab, new Vector3(i, 0, j), Quaternion.identity, helper.group.transform);
             }
         }
     }
@@ -43,6 +44,7 @@ public class Game : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
+        helper.setTimer((int)time);
         PlayerInput();
     }
 
