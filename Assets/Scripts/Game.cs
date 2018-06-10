@@ -11,16 +11,12 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
-    /*
-    public GameObject tilePrefab;
-    public GameObject playerPrefab;
-    public GameObject group;*/
     
     public GameObject playerObj;
     public Helper helper;
     int size = 10;
     Board board;
-
+    int movementEnabled = 1;
     public float time = 0f;
     public GameObject[,] tiles;
     bool[,] revealed;
@@ -38,6 +34,11 @@ public class Game : MonoBehaviour
         CreateBoard();
     }
 
+    public bool isRevealed(Player p)
+    {
+        Vector3 pos = p.getPosition();
+        return revealed[(int) pos.x, (int) pos.z];
+    }
     public void CreateBoard()
     {
 
@@ -55,33 +56,37 @@ public class Game : MonoBehaviour
     {
         time += Time.deltaTime;
         helper.setTimer((int)time);
-        PlayerInput();
+
+        if (movementEnabled == 1)
+        {
+            PlayerInput();
+        }
     }
 
     void PlayerInput()
     {
         Player.Direction direction;
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             direction = Player.Direction.UP;
 
             helper.dados.player.Move(direction);
             playerObj.transform.position = helper.dados.player.getPosition();
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             direction = Player.Direction.LEFT;
             helper.dados.player.Move(direction);
             playerObj.transform.position = helper.dados.player.getPosition();
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             direction = Player.Direction.DOWN;
 
             helper.dados.player.Move(direction);
             playerObj.transform.position = helper.dados.player.getPosition();
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             direction = Player.Direction.RIGHT;
             helper.dados.player.Move(direction);
@@ -90,12 +95,13 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            //TODO: Nao poder Flagear lugares  abertos.
-            if (helper.dados.player.PlaceFlag())
+            Vector3 pos = helper.dados.player.getPosition();
+            int i = (int)pos.x;
+            int j = (int)pos.z;
+
+            if (helper.dados.player.PlaceFlag() && (!revealed[i, j]))
             {
-                Vector3 pos = helper.dados.player.getPosition();
-                int i = (int)pos.x;
-                int j = (int)pos.z;
+               
                 topTiles[i,j] =  GameObject.Instantiate(helper.flagPrefab, new Vector3(i, 1.5f, j), Quaternion.identity);
                 helper.setTextFlagsRemaining(helper.dados.player.getFlagsRemaining());
                 if (helper.dados.player.getFlagsRemaining() ==0) { CheckWinorLose(); }
@@ -104,28 +110,43 @@ public class Game : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-
+            if ((helper.dados.player.isFlagged()==0) && !isRevealed(helper.dados.player))
             StartCoroutine(Dig());
         }
 
     }
 
+    IEnumerator RevealAllBombs()
+    {
+        for(int i=0; i< size; i++)
+        {
+            for (int j=0; j< size; j++)
+            {
+                if (board.isCellBomb(i,j)==1)
+                {
+                    topTiles[i, j] = GameObject.Instantiate(helper.bombPrefab, new Vector3(i, 1.5f, j), Quaternion.identity);
+                }
+            }
+        }
+        yield return new WaitForSeconds(2.0f);
+    }
     IEnumerator Dig()
     {
+        movementEnabled = 0;
         helper.playerAnimator.SetTrigger("dig");
 
-        yield return new WaitForSeconds(1.2f);
-       
-       // helper.playerAnimator.SetTrigger("dig");
-      //  yield helper.pl
+         yield return new WaitForSeconds(1f);
         if (board.isCellBomb(helper.dados.player) == 1)
         {
+
+            yield return StartCoroutine(RevealAllBombs());
             CheckWinorLose();
         }
         else
         {
             RevealCell(helper.dados.player);
         }
+        movementEnabled = 1;
         yield return new WaitForSeconds(2.0f);
     }
  

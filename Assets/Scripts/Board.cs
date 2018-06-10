@@ -17,8 +17,6 @@ public class Board {
         addBombsMatrix();
         fillMatrix();
     }
-
-  
     void addBombsMatrix()
     {
         int x, y;
@@ -47,7 +45,6 @@ public class Board {
         }
 
     }
-    
     public char GetAdjacentBombs(int i, int j)
     {
         int sum = (isCellBomb(i - 1, j - 1) + isCellBomb(i, j - 1) + isCellBomb(i + 1, j - 1)
@@ -90,7 +87,6 @@ public class Board {
             { 
                 line += matrix[i, j] + ",";
             }
-            Debug.Log(line + "");
         }
     }
 

@@ -44,7 +44,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -89,7 +89,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: e389cfc7510d95d4e8f9ad1817d01794,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -291,6 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43f39920e59ec145a79b151f7879101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  size: 10
   r:
     Id: 0
     Name: 
@@ -505,6 +507,7 @@ MonoBehaviour:
     type: 2}
   playerAnimator: {fileID: 0}
   flagPrefab: {fileID: 1618797453556364, guid: c6f6865a4201c944e93f5e1247aec6f6, type: 2}
+  bombPrefab: {fileID: 1414901211068804, guid: e7f3077cd66b4124aa806922fa4cf94c, type: 2}
   group: {fileID: 2074013846}
   inputName: {fileID: 0}
   timer: {fileID: 1010516845}

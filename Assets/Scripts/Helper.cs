@@ -11,38 +11,13 @@ public class Helper : MonoBehaviour {
     public  GameObject playerPrefab;
     public Animator playerAnimator;
     public GameObject flagPrefab;
+    public GameObject bombPrefab;
     public  GameObject group;
     public InputField inputName;
     public Text timer;
     public Data dados;
     public Text flagsRemaining;
     public Material blue;
-    
-
-    public IEnumerator PostRequest(Record r)
-    {
-        //UnityWebRequest request= new UnityWebRequest("http://apiminesweeper.azurewebsites.net/api/Records", "POST");
-        UnityWebRequest request = new UnityWebRequest("http://localhost:53606/api/Records", "POST");
-
-
-
-        string json = JsonUtility.ToJson(r);
-        Debug.Log(json);
-        byte[] bytes = new System.Text.UTF8Encoding().GetBytes(json);
-        request.uploadHandler = new UploadHandlerRaw(bytes);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-
-        yield return request.SendWebRequest();
-        if (request.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + request.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + request.downloadHandler.text);
-        }
-    }
     public void setTimer(int seconds)
     {
         int minutes = seconds / 60;
@@ -61,14 +36,6 @@ public class Helper : MonoBehaviour {
         timer.text = textMinutes + ":" + textSeconds;
 
     }
-    void Start () {
-		   
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     internal void setTextFlagsRemaining(int v)
     {

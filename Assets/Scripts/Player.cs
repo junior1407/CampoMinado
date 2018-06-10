@@ -29,6 +29,10 @@ public class Player {
         x = 0;
         y = 0;
     }
+    public int isFlagged()
+    {
+        return matrix[x, y];
+    }
     public Vector3 getPosition()
     {
         return new Vector3(x, 1.5f, y);
