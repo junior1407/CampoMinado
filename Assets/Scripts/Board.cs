@@ -8,6 +8,7 @@ public class Board {
     public char[,] matrix;
     public string line;
     int SIZE;
+    int score;
 
     public Board(int size)
     {
@@ -93,7 +94,7 @@ public class Board {
         }
     }
 
-    public bool checkFlags(int[,] flags)
+    public int checkFlags(int[,] flags)
     {
         int counter = 0;
         for(int i=0; i<SIZE; i++)
@@ -106,7 +107,7 @@ public class Board {
                 }
             }
         }
-        if (counter == SIZE) { return true; }
-        return false;
+
+        return counter;
     }
 }

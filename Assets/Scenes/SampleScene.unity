@@ -251,6 +251,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 73, y: -90, z: 0}
+--- !u!1 &707980935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 707980936}
+  - component: {fileID: 707980937}
+  m_Layer: 0
+  m_Name: playerData
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &707980936
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 707980935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 366, y: 159.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &707980937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 707980935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d43f39920e59ec145a79b151f7879101, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  r:
+    Id: 0
+    Name: 
+    Score: 0
+    Time: 0
+    dateTime: 
 --- !u!1 &744670172
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,9 +503,12 @@ MonoBehaviour:
   tilePrefab: {fileID: 1582448501796978, guid: 9cdf1fc2dbe442d44bf4a1fa291de0a4, type: 2}
   playerPrefab: {fileID: 1641512097810258, guid: a802f7a1472913942912afe71ea75fd7,
     type: 2}
-  flagPrefab: {fileID: 1551534516810308, guid: 048a7308e5855d04cbdb8ea0fb963858, type: 2}
+  playerAnimator: {fileID: 0}
+  flagPrefab: {fileID: 1618797453556364, guid: c6f6865a4201c944e93f5e1247aec6f6, type: 2}
   group: {fileID: 2074013846}
+  inputName: {fileID: 0}
   timer: {fileID: 1010516845}
+  dados: {fileID: 707980937}
   flagsRemaining: {fileID: 744670174}
   blue: {fileID: 2100000, guid: a3991394e6624f74aa30bb90805fe0d6, type: 2}
 --- !u!1 &1300678328

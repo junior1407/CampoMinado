@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Game : MonoBehaviour
@@ -10,11 +15,11 @@ public class Game : MonoBehaviour
     public GameObject tilePrefab;
     public GameObject playerPrefab;
     public GameObject group;*/
+    
     public GameObject playerObj;
     public Helper helper;
     int size = 10;
     Board board;
-    Player player;
 
     public float time = 0f;
     public GameObject[,] tiles;
@@ -24,8 +29,9 @@ public class Game : MonoBehaviour
     {
         board = new Board(size); //Instancia e prepara a matriz.
         board.printMatrix();
-        player = new Player(size);
+        helper.dados.player = new Player(size);
         playerObj = GameObject.Instantiate(helper.playerPrefab, new Vector3(0, 1.5f, 0), Quaternion.identity);
+        helper.playerAnimator = playerObj.GetComponent<Animator>();
         tiles = new GameObject[size, size];
         topTiles = new GameObject[size, size];
         revealed = new bool[size, size];
@@ -59,57 +65,69 @@ public class Game : MonoBehaviour
         {
             direction = Player.Direction.UP;
 
-            player.Move(direction);
-            playerObj.transform.position = player.getPosition();
+            helper.dados.player.Move(direction);
+            playerObj.transform.position = helper.dados.player.getPosition();
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             direction = Player.Direction.LEFT;
-            player.Move(direction);
-            playerObj.transform.position = player.getPosition();
+            helper.dados.player.Move(direction);
+            playerObj.transform.position = helper.dados.player.getPosition();
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             direction = Player.Direction.DOWN;
-          
-            player.Move(direction);
-            playerObj.transform.position = player.getPosition();
+
+            helper.dados.player.Move(direction);
+            playerObj.transform.position = helper.dados.player.getPosition();
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             direction = Player.Direction.RIGHT;
-            player.Move(direction);
-            playerObj.transform.position = player.getPosition();
+            helper.dados.player.Move(direction);
+            playerObj.transform.position = helper.dados.player.getPosition();
         }
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            if (player.PlaceFlag())
+            //TODO: Nao poder Flagear lugares  abertos.
+            if (helper.dados.player.PlaceFlag())
             {
-                Vector3 pos = player.getPosition();
+                Vector3 pos = helper.dados.player.getPosition();
                 int i = (int)pos.x;
                 int j = (int)pos.z;
                 topTiles[i,j] =  GameObject.Instantiate(helper.flagPrefab, new Vector3(i, 1.5f, j), Quaternion.identity);
-                helper.setTextFlagsRemaining(player.getFlagsRemaining());
-                if (player.getFlagsRemaining() ==0) { CheckWinorLose(); }
+                helper.setTextFlagsRemaining(helper.dados.player.getFlagsRemaining());
+                if (helper.dados.player.getFlagsRemaining() ==0) { CheckWinorLose(); }
             }
 
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-           
-            if (board.isCellBomb(player) == 1)
-            {
-                GameOver();
-            }
-            else
-            {
-                RevealCell(player);
-            }
+
+            StartCoroutine(Dig());
         }
 
     }
 
+    IEnumerator Dig()
+    {
+        helper.playerAnimator.SetTrigger("dig");
+
+        yield return new WaitForSeconds(1.2f);
+       
+       // helper.playerAnimator.SetTrigger("dig");
+      //  yield helper.pl
+        if (board.isCellBomb(helper.dados.player) == 1)
+        {
+            CheckWinorLose();
+        }
+        else
+        {
+            RevealCell(helper.dados.player);
+        }
+        yield return new WaitForSeconds(2.0f);
+    }
  
 
     void RevealCell(Player player)
@@ -152,16 +170,20 @@ public class Game : MonoBehaviour
             }
         }
     }
+
+
+   
     private void CheckWinorLose()
     {
-        if (board.checkFlags(player.getMatrix()))
-        {
-            Win();
-        }
-        else
-        {
-            GameOver();
-        }
+
+        int score = board.checkFlags(helper.dados.player.getMatrix());
+        int finalTime = (int) time;
+        DateTime date = DateTime.Now;
+        Debug.Log(date.ToString());
+       helper.dados.r= new Record { Id = 1, dateTime = date.ToString(), Score = score, Time = finalTime };
+
+        SceneManager.LoadScene("ScoreScene", LoadSceneMode.Single);
+       
     }
 
 
